@@ -16,9 +16,11 @@ buildscript {
 apply plugin: "java"
 apply plugin: "org.springframework.boot"
 
-task run(dependsOn: ':bootRun') << {
-	println 'Boot'
+task run(dependsOn: ':compileJava') << {
+	println 'compile'
 }
+
+run.dependsOn bootRun
 
 jar {
 	baseName = "gs-rest-service"
