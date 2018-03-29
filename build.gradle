@@ -5,7 +5,7 @@ buildscript {
 	ext.spring_boot_version = "1.5.4.RELEASE"
 
 	repositories {
-		jcenter()
+		mavenCentral()
 	}
 
 	dependencies {
@@ -28,7 +28,7 @@ jar {
 }
 
 repositories {
-	jcenter()
+	mavenCentral()
 }
 
 dependencies {
