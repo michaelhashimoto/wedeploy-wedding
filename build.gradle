@@ -2,7 +2,7 @@ group 'io.wedeploy.wedding'
 version '1.0-SNAPSHOT'
 
 buildscript {
-	ext.spring_boot_version = "1.5.4.RELEASE"
+	ext.spring_boot_version = "1.5.10.RELEASE"
 
 	repositories {
 		mavenCentral()
@@ -22,21 +22,12 @@ task run(dependsOn: ':compileJava') << {
 
 run.dependsOn bootRun
 
-jar {
-	baseName = "gs-rest-service"
-	version = "0.1.0"
-}
-
 repositories {
 	mavenCentral()
 }
 
 dependencies {
-	compile "commons-codec:commons-codec:1.10"
-	compile "javax.servlet:jstl"
-	compile "org.apache.tomcat.embed:tomcat-embed-jasper"
 	compile "org.json:json:20170516"
 	compile "org.springframework.boot:spring-boot-starter-tomcat"
 	compile "org.springframework.boot:spring-boot-starter-web"
-	compile "org.quartz-scheduler:quartz:2.2.1"
 }

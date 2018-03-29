@@ -9,13 +9,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class WeddingRestController {
 
-	@GetMapping("/hello")
-	public String counts() throws Exception {
-		JSONObject jsonObject = new JSONObject();
+	@GetMapping("/guests")
+	public String guests() throws Exception {
+		Guests guests = new Guests();
 
-		jsonObject.put("hello", "world");
-
-		return jsonObject.toString();
+		return guests.toJSONString();
 	}
 
 }
