@@ -25,19 +25,22 @@ public class Guests {
 
 			JSONObject jsonObject = new JSONObject();
 
-			jsonObject.put("first_name", valueJSONArray.getString(0));
-			jsonObject.put("last_name", valueJSONArray.getString(1));
+			jsonObject.put("name", valueJSONArray.getString(0));
+			jsonObject.put("guests", valueJSONArray.getString(1));
+			jsonObject.put("type", valueJSONArray.getString(2));
+			jsonObject.put("menu", valueJSONArray.getString(3));
+			jsonObject.put("adult_count", valueJSONArray.getInt(4));
+			jsonObject.put("children_count", valueJSONArray.getInt(5));
+			jsonObject.put("table_num", valueJSONArray.getInt(6));
 
-			String checkedIn = valueJSONArray.getString(2);
+			String checkIn = valueJSONArray.getString(7);
 
-			if (checkedIn.equals("arrived")) {
-				jsonObject.put("checked_in", true);
+			if (checkIn.equals("arrived")) {
+				jsonObject.put("check_in", true);
 			}
-			else if (checkedIn.equals("absent")) {
-				jsonObject.put("checked_in", false);
+			else if (checkIn.equals("absent")) {
+				jsonObject.put("check_in", false);
 			}
-
-			jsonObject.put("table", valueJSONArray.getInt(3));
 
 			_guests.add(new Guest(jsonObject));
 		}
@@ -57,7 +60,7 @@ public class Guests {
 		return jsonArray.toString();
 	}
 
-	private String _range = "A:E";
+	private String _range = "Check-in!A:H";
 	private List<Guest> _guests = new ArrayList<>();
 	private String _id = "1S-upsjmEjzzJ4JI4G55qhdSAoqshIccQewjaErbQwmY";
 	private JSONObject _jsonObject;

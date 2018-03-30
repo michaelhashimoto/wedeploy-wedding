@@ -9,37 +9,33 @@ request.onload = function () {
 	data.forEach(guest => {
 		var guestElement = document.createElement("tr");
 
-		var guestFullNameElement = document.createElement("td");
-		guestFullNameElement.innerHTML = guest.first_name + " " + guest.last_name;
+		var guestNameElement = document.createElement("td");
+		guestNameElement.innerHTML = guest.name;
 
-		var guestFirstNameElement = document.createElement("td");
-		guestFirstNameElement.innerHTML = guest.first_name;
+		var guestPlusOnesElement = document.createElement("td");
+		guestPlusOnesElement.innerHTML = guest.guests;
 
-		var guestLastNameElement = document.createElement("td");
-		guestLastNameElement.innerHTML = guest.last_name;
-
-		var guestCheckedInElement = document.createElement("td");
+		var guestCheckInElement = document.createElement("td");
 
 		var guestCheckBoxElement = document.createElement("input");
 		guestCheckBoxElement.setAttribute("type", "checkbox");
-		guestCheckBoxElement.setAttribute("name", "checked_in");
+		guestCheckBoxElement.setAttribute("name", "check_in");
 
 		if (guest.checked_in) {
 			guestCheckBoxElement.setAttribute("checked", "");
 		}
 
 		var guestTableNumElement = document.createElement("td");
-		guestTableNumElement.innerHTML = guest.table
+		guestTableNumElement.innerHTML = guest.table_num
 
 		guestsElement.appendChild(guestElement);
 
-		guestElement.appendChild(guestFullNameElement);
-		guestElement.appendChild(guestFirstNameElement);
-		guestElement.appendChild(guestLastNameElement);
-		guestElement.appendChild(guestCheckedInElement);
+		guestElement.appendChild(guestNameElement);
+		guestElement.appendChild(guestPlusOnesElement);
+		guestElement.appendChild(guestCheckInElement);
 		guestElement.appendChild(guestTableNumElement);
 
-		guestCheckedInElement.appendChild(guestCheckBoxElement);
+		guestCheckInElement.appendChild(guestCheckBoxElement);
 	});
 }
 
