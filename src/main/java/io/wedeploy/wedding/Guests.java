@@ -28,8 +28,16 @@ public class Guests {
 			jsonObject.put("name", valueJSONArray.getString(0));
 			jsonObject.put("first_name", valueJSONArray.getString(1));
 			jsonObject.put("last_name", valueJSONArray.getString(2));
-			jsonObject.put(
-				"checked_in", Boolean.valueOf(valueJSONArray.getString(3)));
+
+			String checkedIn = valueJSONArray.getString(3);
+
+			if (checkedIn.equals("arrived")) {
+				jsonObject.put("checked_in", true);
+			}
+			else if (checkedIn.equals("absent")) {
+				jsonObject.put("checked_in", false);
+			}
+
 			jsonObject.put("table", valueJSONArray.getInt(4));
 
 			_guests.add(new Guest(jsonObject));
