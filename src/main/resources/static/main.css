@@ -27,3 +27,8 @@ body {
     background-color: #5093fc;
     color: white;
 }
+
+#search-container {
+    padding-top: 12px;
+    padding-bottom: 12px;
+}
