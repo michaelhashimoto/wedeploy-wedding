@@ -1,3 +1,29 @@
 body {
     background-color: aliceblue;
 }
+
+#guest-table {
+    border-collapse: collapse;
+}
+
+#guest-table td, #guest-table th {
+    border: 1px solid #ddd;
+    padding: 8px;
+    width: 225px;
+}
+
+#guest-table tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+#guest-table tr:hover {
+    background-color: #ddd;
+}
+
+#guest-table th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #5093fc;
+    color: white;
+}

@@ -12,7 +12,7 @@ request.onload = function () {
 		var guestElement = document.createElement("tr");
 
 		var guestFullNameElement = document.createElement("td");
-		guestFullNameElement.innerHTML = guest.name;
+		guestFullNameElement.innerHTML = guest.first_name + " " + guest.last_name;
 
 		var guestFirstNameElement = document.createElement("td");
 		guestFirstNameElement.innerHTML = guest.first_name;

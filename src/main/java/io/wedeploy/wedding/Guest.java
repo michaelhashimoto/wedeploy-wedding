@@ -8,7 +8,6 @@ public class Guest {
 	public Guest(JSONObject jsonObject) {
 		_jsonObject = jsonObject;
 
-		_name = _jsonObject.getString("name");
 		_firstName = _jsonObject.getString("first_name");
 		_lastName = _jsonObject.getString("last_name");
 		_checkedIn = _jsonObject.getBoolean("checked_in");
@@ -16,7 +15,7 @@ public class Guest {
 	}
 
 	public String getName() {
-		return _name;
+		return _firstName + " " + _lastName;
 	}
 
 	public JSONObject getJSONObject() {
@@ -31,7 +30,6 @@ public class Guest {
 	private String _firstName;
 	private JSONObject _jsonObject;
 	private String _lastName;
-	private String _name;
 	private Integer _table;
 
 }
