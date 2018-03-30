@@ -7,8 +7,6 @@ request.onload = function () {
 	var guestsElement = document.getElementById("guests");
 
 	data.forEach(guest => {
-		console.log(guest);
-
 		var guestElement = document.createElement("tr");
 
 		var guestFullNameElement = document.createElement("td");
@@ -31,7 +29,7 @@ request.onload = function () {
 		}
 
 		var guestTableNumElement = document.createElement("td");
-		guestTableNumElement.innerHTML = "Table " + guest.table
+		guestTableNumElement.innerHTML = guest.table
 
 		guestsElement.appendChild(guestElement);
 
@@ -46,3 +44,27 @@ request.onload = function () {
 }
 
 request.send();
+
+$("#search").keyup(function() {
+	var $cells = $("td");
+
+	var searchValue = $.trim(this.value).toUpperCase();
+
+	if (searchValue === "") {
+		$cells.parent().show();
+	}
+	else {
+		$cells.parent().hide();
+
+		$cells.filter(function() {
+			var tdValue = $(this).text().toUpperCase();
+
+			if (tdValue.includes(searchValue)) {
+				return true;
+			}
+			else {
+				return false;
+			}
+		}).parent().show();
+	}
+});
