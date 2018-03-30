@@ -15,6 +15,10 @@ public class WeddingSpringBootApplication extends SpringBootServletInitializer {
 
 	public static void main(String[] args) throws Exception {
 		SpringApplication.run(WeddingSpringBootApplication.class, args);
+
+		Guests guests = new Guests();
+
+		System.out.println(guests.toJSONString());
 	}
 
 }
