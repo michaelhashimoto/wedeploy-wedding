@@ -1,4 +1,4 @@
-var request = new XMLHttpRequest();
+/*var request = new XMLHttpRequest();
 
 request.open('GET', '/guests', true);
 
@@ -13,7 +13,7 @@ request.onload = function () {
 		guestNameElement.innerHTML = guest.name;
 
 		var guestPlusOnesElement = document.createElement("td");
-		guestPlusOnesElement.innerHTML = guest.guests;
+		guestPlusOnesElement.innerHTML = guest.guest_names;
 
 		var guestCheckInElement = document.createElement("td");
 
@@ -39,7 +39,7 @@ request.onload = function () {
 	});
 }
 
-request.send();
+request.send();*/
 
 $("#search").keyup(function() {
 	var $cells = $("td");
@@ -64,3 +64,26 @@ $("#search").keyup(function() {
 		}).parent().show();
 	}
 });
+
+$("#update").click(function() {
+	$.ajax({
+		type: 'GET',
+		url: '/guests',
+		crossDomain: false,
+		data: {
+			post: {
+				title: 'ajax using jquery',
+				content: 'jquery rocks'
+			}
+		},
+		dataType: 'json',
+		success: function() {
+			console.log(arguments);
+		},
+		error: function() {
+			console.log(arguments);
+		}
+	});
+});
+
+
