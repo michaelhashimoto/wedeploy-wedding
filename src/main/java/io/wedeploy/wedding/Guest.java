@@ -37,7 +37,7 @@ public class Guest {
 			return "TRUE";
 		}
 
-		return "FALSE";
+		return "";
 	}
 
 	public String getGuestName() {
