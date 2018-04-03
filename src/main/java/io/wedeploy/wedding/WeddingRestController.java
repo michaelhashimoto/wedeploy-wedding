@@ -18,30 +18,20 @@ public class WeddingRestController {
 	public RedirectView code(@RequestParam("code") String code) {
 		GoogleSheetsUtil.storeAccessToken(code);
 
+		GoogleSheetsUtil.init();
+
 		return new RedirectView("/");
 	}
 
 	@GetMapping("/guests")
 	public String guests() throws Exception {
-		JSONArray jsonArray = new JSONArray()
-			.put(new JSONObject()
-				.put("guest_name","Michael Hashimoto")
-				.put("related_guest_names","Crystal Son")
-				.put("checked_in",false)
-				.put("table_num",3)
-			)
-			.put(new JSONObject()
-				.put("guest_name","Crystal Son")
-				.put("related_guest_names","Michael Hashimoto")
-				.put("checked_in",true)
-				.put("table_num",3)
-			)
-			.put(new JSONObject()
-				.put("guest_name","Evan Quitagua")
-				.put("related_guest_names","")
-				.put("checked_in",true)
-				.put("table_num",3)
-			);
+		String accessToken = GoogleSheetsUtil.getAccessToken();
+
+		if (accessToken == null) {
+			return "[]";
+		}
+
+		JSONArray jsonArray = Guest.getGuestsJSONArray();
 
 		return jsonArray.toString();
 	}

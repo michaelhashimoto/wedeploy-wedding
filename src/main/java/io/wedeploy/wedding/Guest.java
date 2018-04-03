@@ -39,6 +39,16 @@ public class Guest {
 		return _category;
 	}
 
+	public JSONObject getJSONObject() {
+		JSONObject jsonObject = new JSONObject()
+			.put("checked_in", false)
+			.put("guest_name", _guestName)
+			.put("related_guest_names", StringUtils.join(_relatedGuestNames, ","))
+			.put("table_number", 1);
+
+		return jsonObject;
+	}
+
 	public static Guest getGuest(String guestName) {
 		if (_guests.containsKey(guestName)) {
 			return _guests.get(guestName);
@@ -51,6 +61,16 @@ public class Guest {
 		List<Guest> guests = new ArrayList<>(_guests.values());
 
 		return guests;
+	}
+
+	public static JSONArray getGuestsJSONArray() {
+		JSONArray jsonArray = new JSONArray();
+
+		for (Guest guest : _guests.values()) {
+			jsonArray.put(guest.getJSONObject());
+		}
+
+		return jsonArray;
 	}
 
 	public static Boolean exists(String guestName) {

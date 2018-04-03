@@ -22,10 +22,10 @@ public class GoogleSheetsUtil {
 
 	public static void init() {
 		_readGoogleSheet("EN's Guests!A:C", Guest.Category.FRIENDS);
-		//_readGoogleSheet("Bride's Parents Guests!A:C", Guest.Category.BRIDES_FAMILY);
-		//_readGoogleSheet("Groom's Parents Guests!A:C", Guest.Category.GROOMS_FAMILY);
+		_readGoogleSheet("Bride's Parents Guests!A:C", Guest.Category.BRIDES_FAMILY);
+		_readGoogleSheet("Groom's Parents Guests!A:C", Guest.Category.GROOMS_FAMILY);
 
-		_readTableAssignmentsGoogleSheet();
+		//_readTableAssignmentsGoogleSheet();
 	}
 
 	public static String fixURI(String range) {
@@ -46,7 +46,8 @@ public class GoogleSheetsUtil {
 		sb.append(fixURI("Table Assignments!A:B"));
 
 		JSONObject jsonObject = new JSONObject(
-			CurlUtil.curl(sb.toString()));
+			CurlUtil.curl(
+				sb.toString(), null, GoogleSheetsUtil.getAccessToken()));
 
 		JSONArray valuesJSONArray = jsonObject.getJSONArray("values");
 
@@ -65,7 +66,7 @@ public class GoogleSheetsUtil {
 
 			if (guestNames.contains(guestName)) {
 				throw new RuntimeException(
-					"Duplicate guest name on table assignements: " + guestName);
+					"Duplicate guest name on table assignments: " + guestName);
 			}
 
 			guestNames.add(guestName);
@@ -88,7 +89,7 @@ public class GoogleSheetsUtil {
 			i++;
 		}
 
-		TableAssignment.update();
+		// TableAssignment.update();
 	}
 
 	private static void _readGoogleSheet(
@@ -102,7 +103,8 @@ public class GoogleSheetsUtil {
 		sb.append(fixURI(range));
 
 		JSONObject jsonObject = new JSONObject(
-			CurlUtil.curl(sb.toString()));
+			CurlUtil.curl(
+				sb.toString(), null, GoogleSheetsUtil.getAccessToken()));
 
 		JSONArray valuesJSONArray = jsonObject.getJSONArray("values");
 
@@ -181,7 +183,8 @@ public class GoogleSheetsUtil {
 		sb.append("redirect_uri=" + fixURI(_WEDDING_APP_URL + "/code") + "&");
 		sb.append("grant_type=" + "authorization_code");
 
-		_accessTokenJSONObject = new JSONObject(CurlUtil.curl(sb.toString(), "{}"));
+		_accessTokenJSONObject = new JSONObject(CurlUtil.curl(
+			sb.toString(), "{}"));
 
 		_accessToken = _accessTokenJSONObject.getString("access_token");
 	}
