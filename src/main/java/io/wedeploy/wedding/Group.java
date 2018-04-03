@@ -30,7 +30,17 @@ public class Group {
 
 			relatedGuestNames.remove(guestName);
 
-			_guests.add(new Guest(guestName, relatedGuestNames, category, menuChoice));
+			if (menuChoice.equals("Chinese & Vegetarian")) {
+				if (i < 1) {
+					_guests.add(new Guest(guestName, relatedGuestNames, category, "Chinese"));
+				}
+				else {
+					_guests.add(new Guest(guestName, relatedGuestNames, category, "Vegetarian"));
+				}
+			}
+			else {
+				_guests.add(new Guest(guestName, relatedGuestNames, category, menuChoice));
+			}
 		}
 	}
 

@@ -7,9 +7,9 @@ var update_data = function(guests) {
 		var guestElement = document.createElement("tr");
 
 		var guestNameElement = document.createElement("td");
-		var guestNamePElement = document.createElement("p");
-		guestNamePElement.innerHTML = guest.guest_name;
-		guestNameElement.appendChild(guestNamePElement);
+		var guestNameDivElement = document.createElement("div");
+		guestNameDivElement.innerHTML = guest.guest_name;
+		guestNameElement.appendChild(guestNameDivElement);
 
 		if (guest.related_guest_names != "") {
 			var relatedGuestNamesElement = document.createElement("small");
