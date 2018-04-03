@@ -12,7 +12,7 @@ public class Group {
 
 	protected Group(
 		String primaryGuestName, List<String> guestNames,
-		Guest.Category category) {
+		Guest.Category category, String menuChoice) {
 
 		if (_groups.containsKey(primaryGuestName)) {
 			throw new RuntimeException("Duplicate group " + primaryGuestName);
@@ -23,12 +23,14 @@ public class Group {
 
 		_groups.put(primaryGuestName, this);
 
-		for (String guestName : guestNames) {
+		for (int i = 0; i < guestNames.size(); i++) {
+			String guestName = guestNames.get(i);
+
 			List<String> relatedGuestNames = new ArrayList<>(guestNames);
 
 			relatedGuestNames.remove(guestName);
 
-			_guests.add(new Guest(guestName, relatedGuestNames, category));
+			_guests.add(new Guest(guestName, relatedGuestNames, category, menuChoice));
 		}
 	}
 

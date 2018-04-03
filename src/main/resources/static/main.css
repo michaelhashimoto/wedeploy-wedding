@@ -2,6 +2,10 @@ body {
     background-color: aliceblue;
 }
 
+small {
+    font-size: 10px;
+}
+
 #guest-table {
     border-collapse: collapse;
 }

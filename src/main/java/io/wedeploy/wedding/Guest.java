@@ -14,7 +14,7 @@ import org.apache.commons.lang.StringUtils;
 public class Guest {
 
 	public Guest(
-		String guestName, List<String> relatedGuestNames, Category category) {
+		String guestName, List<String> relatedGuestNames, Category category, String menuChoice) {
 
 		if (_guests.containsKey(guestName)) {
 			throw new RuntimeException("Duplicate guest " + guestName);
@@ -25,28 +25,59 @@ public class Guest {
 		_guestName = guestName;
 		_relatedGuestNames = relatedGuestNames;
 		_category = category;
+		_menuChoice = menuChoice;
+	}
+
+	public String getCategory() {
+		return _category.toString();
+	}
+
+	public String getCheckedIn() {
+		if(_checkedIn) {
+			return "TRUE";
+		}
+
+		return "FALSE";
 	}
 
 	public String getGuestName() {
 		return _guestName;
 	}
 
-	public String getRelatedGuestNames() {
-		return StringUtils.join(_relatedGuestNames, ",");
+	public String getMenuChoice() {
+		return _menuChoice;
 	}
 
-	public Category getCategory() {
-		return _category;
+	public String getRelatedGuestNames() {
+		return StringUtils.join(_relatedGuestNames, ", ");
 	}
 
 	public JSONObject getJSONObject() {
 		JSONObject jsonObject = new JSONObject()
-			.put("checked_in", false)
-			.put("guest_name", _guestName)
-			.put("related_guest_names", StringUtils.join(_relatedGuestNames, ","))
-			.put("table_number", 1);
+			.put("category", getCategory())
+			.put("checked_in", getCheckedIn())
+			.put("guest_name", getGuestName())
+			.put("menu_choice", getMenuChoice())
+			.put("related_guest_names", getRelatedGuestNames())
+			.put("table_num", getTableNumber());
 
 		return jsonObject;
+	}
+
+	public String getTableNumber() {
+		if (_tableNumber <= 0) {
+			return "";
+		}
+
+		return String.valueOf(_tableNumber);
+	}
+
+	public void setCheckedIn(Boolean checkedIn) {
+		_checkedIn = checkedIn;
+	}
+
+	public void setTableNumber(Integer tableNumber) {
+		_tableNumber = tableNumber;
 	}
 
 	public static Guest getGuest(String guestName) {
@@ -82,12 +113,15 @@ public class Guest {
 	}
 
 	private Category _category;
+	private boolean _checkedIn;
 	private String _guestName;
+	private String _menuChoice;
+	private int _tableNumber;
 	private List<String> _relatedGuestNames;
 
 	public static enum Category {
-		BRIDES_FAMILY("Bride's Family"), FRIENDS("Friends"),
-		GROOMS_FAMILY("Groom's Family");
+		BRIDES_FAMILY("Bride's Parent's Guests"), FRIENDS("EN's Guests"),
+		GROOMS_FAMILY("Groom's Parent's Guests");
 
 		public String toString() {
 			return _value;

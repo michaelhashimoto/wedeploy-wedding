@@ -8,6 +8,8 @@ import java.net.URL;
 import java.net.HttpURLConnection;
 import java.net.URLConnection;
 
+import org.apache.commons.codec.binary.Base64;
+
 public class CurlUtil {
 
 	public static String curl(String curl) {
@@ -19,6 +21,13 @@ public class CurlUtil {
 	}
 
 	public static String curl(String curl, String request, String bearer) {
+		if (curl.contains("?")) {
+			curl += "&key=" + _GOOGLE_KEY;
+		}
+		else {
+			curl += "?key=" + _GOOGLE_KEY;
+		}
+
 		System.out.println("Reading " + curl);
 
 		try {
@@ -34,12 +43,14 @@ public class CurlUtil {
 
 				if (bearer != null) {
 					httpURLConnection.setRequestProperty("Authorization", "Bearer " + bearer);
+
+					System.out.println("bearer=" + bearer);
 				}
 
 				if (request != null) {
 					httpURLConnection.setRequestMethod("POST");
 
-					httpURLConnection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+					httpURLConnection.setRequestProperty("Content-Type", "application/json");
 
 					httpURLConnection.setDoOutput(true);
 

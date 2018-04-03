@@ -7,10 +7,34 @@ var update_data = function(guests) {
 		var guestElement = document.createElement("tr");
 
 		var guestNameElement = document.createElement("td");
-		guestNameElement.innerHTML = guest.guest_name;
+		var guestNamePElement = document.createElement("p");
+		guestNamePElement.innerHTML = guest.guest_name;
+		guestNameElement.appendChild(guestNamePElement);
 
-		var relatedGuestNamesElement = document.createElement("td");
-		relatedGuestNamesElement.innerHTML = guest.related_guest_names;
+		if (guest.related_guest_names != "") {
+			var relatedGuestNamesElement = document.createElement("small");
+
+			var relatedGuestNamesWrapperElement = document.createElement("i");
+
+			var relatedGuestNamesTitleElement = document.createElement("b");
+			relatedGuestNamesTitleElement.innerHTML = "Related:" + `<br />`
+
+			var relatedGuestNamesBodyElement = document.createElement("i");
+			relatedGuestNamesBodyElement.innerHTML = guest.related_guest_names;
+
+			relatedGuestNamesWrapperElement.appendChild(relatedGuestNamesTitleElement);
+			relatedGuestNamesWrapperElement.appendChild(relatedGuestNamesBodyElement);
+
+			relatedGuestNamesElement.appendChild(relatedGuestNamesWrapperElement);
+
+			guestNameElement.appendChild(relatedGuestNamesElement);
+		}
+
+		var guestPartyElement = document.createElement("td");
+		guestPartyElement.innerHTML = guest.category
+
+		var guestMenuChoiceElement = document.createElement("td");
+		guestMenuChoiceElement.innerHTML = guest.menu_choice
 
 		var guestCheckInElement = document.createElement("td");
 
@@ -18,7 +42,7 @@ var update_data = function(guests) {
 		guestCheckBoxElement.setAttribute("type", "checkbox");
 		guestCheckBoxElement.setAttribute("name", "check_in");
 
-		if (guest.checked_in) {
+		if (guest.checked_in == "TRUE") {
 			guestCheckBoxElement.setAttribute("checked", "");
 		}
 
@@ -28,9 +52,10 @@ var update_data = function(guests) {
 		guestsElement.appendChild(guestElement);
 
 		guestElement.appendChild(guestNameElement);
-		guestElement.appendChild(relatedGuestNamesElement);
-		guestElement.appendChild(guestCheckInElement);
 		guestElement.appendChild(guestTableNumElement);
+		guestElement.appendChild(guestPartyElement);
+		guestElement.appendChild(guestMenuChoiceElement);
+		guestElement.appendChild(guestCheckInElement);
 
 		guestCheckInElement.appendChild(guestCheckBoxElement);
 	});
