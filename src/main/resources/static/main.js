@@ -88,12 +88,18 @@ $("#search").keyup(function() {
 	var searchValue = $.trim(this.value).toUpperCase();
 
 	if (searchValue === "") {
-		$cells.parent().show();
+		var $parents = $cells.parent();
+
+		$parents.show();
+
+		var searchResultsElement = document.getElementById("search-results");
+
+		searchResultsElement.innerHTML = "Showing " + $parents.length + " results.";
 	}
 	else {
 		$cells.parent().hide();
 
-		$cells.filter(function() {
+		var $parents = $cells.filter(function() {
 			var tdValue = $(this).text().toUpperCase();
 
 			if (tdValue.includes(searchValue)) {
@@ -102,6 +108,12 @@ $("#search").keyup(function() {
 			else {
 				return false;
 			}
-		}).parent().show();
+		}).parent();
+
+		$parents.show();
+
+		var searchResultsElement = document.getElementById("search-results");
+
+		searchResultsElement.innerHTML = "Showing " + $parents.length + " results.";
 	}
 });

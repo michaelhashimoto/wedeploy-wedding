@@ -4,37 +4,53 @@
 	<head>
 		<meta charset="utf-8">
 
-		<link href="https://cdn.lfrs.sl/alloyui.com/3.0.1/aui-css/css/bootstrap.min.css" rel="stylesheet" />
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
 		<link href="main.css" rel="stylesheet" />
 	</head>
 	<body class="container">
 		<h1>Guest List</h1>
 
-		<div id="search-container">
-			<form>
-				<label>Quick Search: <input id="search" type="text"></label>
-			</form>
+		<a class="btn btn-primary" href="/login">Log In</a>
+
+		<br /><br />
+
+		<ul class="nav nav-tabs">
+			<li class="active"><a data-toggle="tab" href="#check-in">Check-In</a></li>
+			<li><a data-toggle="tab" href="#table-assignment">Table Assignments</a></li>
+		</ul>
+
+		<div class="tab-content">
+			<div id="check-in" class="tab-pane fade in active">
+				<div id="search-container">
+					<form>
+						<label>Search: <input id="search" type="text"></label>
+					</form>
+				</div>
+
+				<div id="search-results">Showing all results.</div>
+
+				<table id="guest-table">
+					<thead>
+						<tr>
+							<th>Guest Name</th>
+							<th>Table #</th>
+							<th>Party</th>
+							<th>Menu Choice</th>
+							<th>Check In</th>
+						</tr>
+					</thead>
+					<tbody id="guests">
+					</tbody>
+				</table>
+			</div>
+			<div id="table-assignment" class="tab-pane fade">
+				<p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+			</div>
 		</div>
-
-		<table id="guest-table">
-			<thead>
-				<tr>
-					<th>Guest Name</th>
-					<th>Table #</th>
-					<th>Party</th>
-					<th>Menu Choice</th>
-					<th>Check In</th>
-				</tr>
-			</thead>
-			<tbody id="guests">
-			</tbody>
-		</table>
-
-		<p><a href="/login">Log In</a></p>
-
-		<p><a id="update" href="">Update</a></p>
-
 	</body>
 
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>

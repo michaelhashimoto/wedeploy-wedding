@@ -83,6 +83,8 @@ public class GoogleSheetsUtil {
 
 		JSONArray valuesRequestJSONArray = new JSONArray();
 
+		// Write guests to 'Table Assignments'
+
 		List<Guest> guests = Guest.getGuests();
 
 		for (int i = 0; i < guests.size() ; i++) {
@@ -95,6 +97,21 @@ public class GoogleSheetsUtil {
 				.put(guest.getCategory())
 				.put(guest.getMenuChoice())
 				.put(guest.getCheckedIn())
+			);
+		}
+
+		// Add blank spaces
+
+		for (int i = 0; i < 25 ; i++) {
+			Guest guest = guests.get(i);
+
+			valuesRequestJSONArray.put(new JSONArray()
+				.put("")
+				.put("")
+				.put("")
+				.put("")
+				.put("")
+				.put("")
 			);
 		}
 
@@ -266,7 +283,7 @@ public class GoogleSheetsUtil {
 	private static JSONObject _accessTokenJSONObject;
 
 	private static String _accessToken;
-	private static String _sheetID = "1ReppAaCxdPT2dp1EW86T7-kABIC8LIvolwTb550Ll3Y";
+	private static String _sheetID = "1S-upsjmEjzzJ4JI4G55qhdSAoqshIccQewjaErbQwmY";
 
 	private final static String _WEDDING_APP_URL = EnvironmentUtil.get("WEDDING_APP_URL");
 	private final static String _GOOGLE_CLIENT_ID = EnvironmentUtil.get("GOOGLE_CLIENT_ID");
