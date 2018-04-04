@@ -1,9 +1,18 @@
-body {
-    background-color: aliceblue;
-}
-
 small {
     font-size: 10px;
+}
+
+table {
+    padding: 8px;
+}
+
+img {
+    width: 500px;
+    height: 350px;
+    padding: 25px;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
 }
 
 #guest-table {
@@ -31,4 +40,8 @@ small {
 #search-container {
     padding-top: 12px;
     padding-bottom: 12px;
+}
+
+.col-sm-3 {
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.19);
 }
