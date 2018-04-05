@@ -1,5 +1,10 @@
 package io.wedeploy.wedding;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -34,6 +39,53 @@ public class WeddingRestController {
 		JSONArray jsonArray = Guest.getGuestsJSONArray();
 
 		return jsonArray.toString();
+	}
+
+	@GetMapping("/guests_by_table")
+	public String guestsByTable() throws Exception {
+		String accessToken = GoogleSheetsUtil.getAccessToken();
+
+		if (accessToken == null) {
+			return "[]";
+		}
+
+		Map<Integer, List<Guest>> guestsMap = new TreeMap<>();
+
+		for (int i = 0; i <= 28; i++) {
+			guestsMap.put(i, new ArrayList<Guest>());
+		}
+
+		for (Guest guest : Guest.getGuests()) {
+			String tableNumber = guest.getTableNumber();
+
+			if (tableNumber.equals("")) {
+				tableNumber = "0";
+			}
+
+			Integer tableNumberKey = Integer.valueOf(tableNumber);
+
+			List<Guest> guests = guestsMap.get(tableNumberKey);
+
+			guests.add(guest);
+		}
+
+		JSONArray guestsByTableJSONArray = new JSONArray();
+
+		for (Integer tableNumber : guestsMap.keySet()) {
+			JSONArray guestsJSONArray = new JSONArray();
+
+			JSONObject tableJSONObject = new JSONObject()
+				.put("table_num", tableNumber)
+				.put("guests", guestsJSONArray);
+
+			for (Guest guest : guestsMap.get(tableNumber)) {
+				guestsJSONArray.put(guest.getJSONObject());
+			}
+
+			guestsByTableJSONArray.put(tableJSONObject);
+		}
+
+		return guestsByTableJSONArray.toString();
 	}
 
 	@RequestMapping(value="/login", method = RequestMethod.GET)

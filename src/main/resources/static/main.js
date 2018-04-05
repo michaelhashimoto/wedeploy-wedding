@@ -1,4 +1,4 @@
-var update_data = function(guests) {
+var update_search = function(guests) {
 	var guestsElement = document.getElementById("guests");
 
 	guestsElement.innerHTML = "";
@@ -61,7 +61,7 @@ var update_data = function(guests) {
 	});
 }
 
-var update_data_on_node = function() {
+var update_search_on_node = function() {
 	$.ajax({
 		type: 'GET',
 		url: '/guests',
@@ -70,7 +70,7 @@ var update_data_on_node = function() {
 		success: function() {
 			var guests = arguments[0];
 
-			update_data(guests);
+			update_search(guests);
 		},
 		error: function() {
 			console.log(arguments);
@@ -78,9 +78,120 @@ var update_data_on_node = function() {
 	});
 }
 
-$.ready(update_data_on_node());
+var update_tables = function(guests_by_table) {
+	var guestsByTablesElement = document.getElementById("guestsByTables");
 
-$("#update").click(update_data_on_node());
+	guestsByTablesElement.innerHTML = "";
+
+	var columns_per_row = 4;
+	var columns_size = 3;
+
+	for (i = 0; i < (guests_by_table.length - 1); i++) {
+		var rowDiv = null;
+		var rowBody = null;
+
+		var row_num = parseInt((i / columns_per_row) + 1);
+		var col_num = parseInt(i % columns_per_row);
+		var table_num = parseInt(i) + 1;
+
+		console.log("table_num: " + table_num);
+		console.log("row_num: " + row_num);
+		console.log("col_num: " + col_num);
+
+		if ((i % columns_per_row) == 0) {
+			rowDiv = document.createElement("div");
+			rowDiv.setAttribute("class", "row");
+			rowDiv.setAttribute("id", "row" + row_num);
+
+			guestsByTablesElement.appendChild(rowDiv);
+		}
+		else {
+			rowDiv = document.getElementById("row" + row_num);
+		}
+
+		var tableDiv = document.createElement("div");
+		tableDiv.setAttribute("class", "col-sm-" + columns_size);
+
+		var tableHeader = document.createElement("h4");
+		tableHeader.innerHTML = "Table #" + table_num;
+
+		var tableBody = document.createElement("ol");
+
+		tableDiv.appendChild(tableHeader);
+		tableDiv.appendChild(tableBody);
+
+		update_table(guests_by_table[table_num], tableBody);
+
+		rowDiv.appendChild(tableDiv);
+	}
+
+	var unassignedRowDiv = document.createElement("div");
+	unassignedRowDiv.setAttribute("class", "row");
+
+	var tableDiv = document.createElement("div");
+	tableDiv.setAttribute("class", "col-sm-12");
+
+	var tableHeader = document.createElement("h4");
+	tableHeader.innerHTML = "Unassigned";
+
+	var tableBody = document.createElement("ol");
+
+	update_table(guests_by_table[0], tableBody, true);
+
+	tableDiv.appendChild(tableHeader);
+	tableDiv.appendChild(tableBody);
+
+	unassignedRowDiv.appendChild(tableDiv);
+
+	guestsByTablesElement.appendChild(unassignedRowDiv);
+}
+
+var update_table = function(table_of_guests, tableBody, isUnassigned) {
+	var guests = table_of_guests.guests;
+
+	if (guests != null) {
+		var min_num_guests = 10;
+
+		if (isUnassigned) {
+			min_num_guests = guests.length;
+		}
+
+		for (var i = 0; (i < min_num_guests); i++) {
+			var guest = guests[i];
+
+			var guest_name = "";
+
+			if (guest != null) {
+				guest_name = guest.guest_name;
+			}
+
+			var tableGuest = document.createElement("li");
+			tableGuest.innerHTML = guest_name;
+
+			tableBody.appendChild(tableGuest);
+		}
+	}
+}
+
+var update_tables_on_node = function() {
+	$.ajax({
+		type: 'GET',
+		url: '/guests_by_table',
+		crossDomain: false,
+		dataType: 'json',
+		success: function() {
+			var guests = arguments[0];
+
+			update_tables(guests);
+		},
+		error: function() {
+			console.log(arguments);
+		}
+	});
+}
+
+$.ready(update_search_on_node());
+$.ready(update_tables_on_node());
 
 $("#search").keyup(function() {
 	var $cells = $("td");
