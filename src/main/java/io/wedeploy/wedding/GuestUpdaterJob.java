@@ -38,7 +38,7 @@ public class GuestUpdaterJob implements Job {
 
 			Trigger trigger = TriggerBuilder
 				.newTrigger().withIdentity("cronTrigger", "group")
-				.withSchedule(CronScheduleBuilder.cronSchedule("*/30 * * ? * *"))
+				.withSchedule(CronScheduleBuilder.cronSchedule("*/5 * * ? * *"))
 				.build();
 
 			_scheduler = new StdSchedulerFactory().getScheduler();
