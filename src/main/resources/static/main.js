@@ -1,10 +1,11 @@
-var update_search = function(guests) {
+var init_search = function(guests) {
 	var guestsElement = document.getElementById("guests");
 
 	guestsElement.innerHTML = "";
 
 	guests.forEach(guest => {
 		var guestElement = document.createElement("tr");
+		guestElement.setAttribute("id", "search-" + guest.guest_id);
 
 		var guestNameElement = document.createElement("td");
 		var guestNameDivElement = document.createElement("div");
@@ -61,7 +62,7 @@ var update_search = function(guests) {
 	});
 }
 
-var update_search_on_node = function() {
+var init_search_on_node = function() {
 	$.ajax({
 		type: 'GET',
 		url: '/guests',
@@ -70,7 +71,7 @@ var update_search_on_node = function() {
 		success: function() {
 			var guests = arguments[0];
 
-			update_search(guests);
+			init_search(guests);
 		},
 		error: function() {
 			console.log(arguments);
@@ -78,7 +79,7 @@ var update_search_on_node = function() {
 	});
 }
 
-var update_tables = function(guests_by_table) {
+var init_tables = function(guests_by_table) {
 	var guestsByTablesElement = document.getElementById("guestsByTables");
 
 	guestsByTablesElement.innerHTML = "";
@@ -93,10 +94,6 @@ var update_tables = function(guests_by_table) {
 		var row_num = parseInt((i / columns_per_row) + 1);
 		var col_num = parseInt(i % columns_per_row);
 		var table_num = parseInt(i) + 1;
-
-		console.log("table_num: " + table_num);
-		console.log("row_num: " + row_num);
-		console.log("col_num: " + col_num);
 
 		if ((i % columns_per_row) == 0) {
 			rowDiv = document.createElement("div");
@@ -173,7 +170,7 @@ var update_table = function(table_of_guests, tableBody, isUnassigned) {
 	}
 }
 
-var update_tables_on_node = function() {
+var init_tables_on_node = function() {
 	$.ajax({
 		type: 'GET',
 		url: '/guests_by_table',
@@ -182,7 +179,7 @@ var update_tables_on_node = function() {
 		success: function() {
 			var guests = arguments[0];
 
-			update_tables(guests);
+			init_tables(guests);
 		},
 		error: function() {
 			console.log(arguments);
@@ -190,8 +187,8 @@ var update_tables_on_node = function() {
 	});
 }
 
-$.ready(update_search_on_node());
-$.ready(update_tables_on_node());
+$.ready(init_search_on_node());
+$.ready(init_tables_on_node());
 
 $("#search").keyup(function() {
 	var $cells = $("td");
@@ -228,3 +225,91 @@ $("#search").keyup(function() {
 		searchResultsElement.innerHTML = "Showing " + $parents.length + " results.";
 	}
 });
+
+$("#simple").click(function() {
+    var hashi = {data:"lkas"};
+
+    $.ajax({
+        type: 'POST',
+        url: '/string',
+        crossDomain: false,
+        dataType: 'json',
+        success: function() {
+            console.log(arguments);
+        },
+        error: function() {
+            console.log(arguments);
+        },
+        data: hashi
+    });
+});
+
+$("#fancy").click(function() {
+	var data = {"first":"michael","last":"hashimoto"};
+
+    postJSONData("/string", data);
+});
+
+var postJSONData = function(url, data) {
+    var request = {data:JSON.stringify(data)};
+
+    $.ajax({
+        type: 'POST',
+        url: url,
+        crossDomain: false,
+        dataType: 'json',
+        success: function() {
+            console.log(arguments);
+        },
+        error: function() {
+            console.log(arguments);
+        },
+        data: request
+    });
+}
+
+var update_search = function(guests) {
+	console.log("updating");
+
+	guests.forEach(guest => {
+		var guestElement = document.getElementById("search-" + guest.guest_id);
+
+		var tdElements = guestElement.childNodes;
+
+		tdElements[1].innerHTML = guest.table_num;
+
+		var checkedInElements = tdElements[4].getElementsByTagName("input");
+
+		if (guest.checked_in == "TRUE") {
+			console.log(guest.guest_name);
+			console.log(checkedInElements[0]);
+
+			checkedInElements[0].setAttribute("checked", "");
+		}
+		else {
+			checkedInElements[0].removeAttribute("checked");
+		}
+	});
+}
+
+var update_search_on_node = function() {
+	$.ajax({
+		type: 'GET',
+		url: '/guests',
+		crossDomain: false,
+		dataType: 'json',
+		success: function() {
+			var guests = arguments[0];
+
+			update_search(guests);
+		},
+		error: function() {
+			console.log(arguments);
+		}
+	});
+}
+
+var intervalID = setInterval(function(){
+	update_search_on_node();
+	init_tables_on_node();
+}, 5000);

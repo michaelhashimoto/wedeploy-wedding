@@ -28,6 +28,13 @@ public class WeddingRestController {
 		return new RedirectView("/");
 	}
 
+	@RequestMapping(value="/string", method = RequestMethod.POST)
+	public String string(@RequestParam("data") String data) {
+		System.out.println(data);
+
+		return "{\"message\":\"received\"}";
+	}
+
 	@GetMapping("/guests")
 	public String guests() throws Exception {
 		String accessToken = GoogleSheetsUtil.getAccessToken();
@@ -35,6 +42,8 @@ public class WeddingRestController {
 		if (accessToken == null) {
 			return "[]";
 		}
+
+		GuestUpdaterJob.start();
 
 		JSONArray jsonArray = Guest.getGuestsJSONArray();
 

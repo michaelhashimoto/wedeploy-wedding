@@ -21,11 +21,11 @@ import com.google.api.services.sheets.v4.model.BatchGetValuesResponse;
 public class GoogleSheetsUtil {
 
 	public static void init() {
-		_readGoogleSheet("EN's Guests!A:I", Guest.Category.FRIENDS);
-		_readGoogleSheet("Bride's Parents Guests!A:I", Guest.Category.BRIDES_FAMILY);
-		_readGoogleSheet("Groom's Parents Guests!A:I", Guest.Category.GROOMS_FAMILY);
+		_initSearchTableFromGoogleSheet("EN's Guests!A:I", Guest.Category.FRIENDS);
+		_initSearchTableFromGoogleSheet("Bride's Parents Guests!A:I", Guest.Category.BRIDES_FAMILY);
+		_initSearchTableFromGoogleSheet("Groom's Parents Guests!A:I", Guest.Category.GROOMS_FAMILY);
 
-		_readTableAssignmentsGoogleSheet("Table Assignments!A:F");
+		_initTableAssignmentsFromGoogleSheet("Table Assignments!A:F");
 	}
 
 	public static String fixURI(String range) {
@@ -37,7 +37,7 @@ public class GoogleSheetsUtil {
 		return range;
 	}
 
-	private static void _readTableAssignmentsGoogleSheet(String range) {
+	public static JSONObject readTableAssignmentsGoogleSheet(String range) {
 		StringBuilder sb = new StringBuilder();
 
 		sb.append("https://sheets.googleapis.com/v4/spreadsheets/");
@@ -45,9 +45,61 @@ public class GoogleSheetsUtil {
 		sb.append("/values/");
 		sb.append(fixURI(range));
 
-		JSONObject jsonObject = new JSONObject(
-			CurlUtil.curl(
-				sb.toString(), null, GoogleSheetsUtil.getAccessToken()));
+		return new JSONObject(CurlUtil.curl(sb.toString(), null, GoogleSheetsUtil.getAccessToken()));
+	}
+
+	public static void writeTableAssignmentsGoogleSheet(String range) {
+		JSONArray valuesRequestJSONArray = new JSONArray();
+
+		List<Guest> guests = Guest.getGuests();
+
+		for (int i = 0; i < guests.size() ; i++) {
+			Guest guest = guests.get(i);
+
+			valuesRequestJSONArray.put(new JSONArray()
+				.put(guest.getGuestName())
+				.put(guest.getRelatedGuestNames())
+				.put(guest.getTableNumber())
+				.put(guest.getCategory())
+				.put(guest.getMenuChoice())
+				.put(guest.getCheckedIn())
+			);
+		}
+
+		for (int i = 0; i < 25 ; i++) {
+			Guest guest = guests.get(i);
+
+			valuesRequestJSONArray.put(new JSONArray()
+				.put("")
+				.put("")
+				.put("")
+				.put("")
+				.put("")
+				.put("")
+			);
+		}
+
+		StringBuilder sb = new StringBuilder();
+
+		sb.append("https://sheets.googleapis.com/v4/spreadsheets/");
+		sb.append(_sheetID);
+		sb.append("/values:batchUpdate");
+
+		JSONObject requestJSONObject = new JSONObject()
+			.put("valueInputOption", "RAW")
+			.put("data", new JSONArray()
+				.put(new JSONObject()
+					.put("range", "Table Assignments!A2:F")
+					.put("majorDimension", "ROWS")
+					.put("values", valuesRequestJSONArray)
+				)
+			);
+
+		CurlUtil.curl(sb.toString(), requestJSONObject.toString(), _accessToken);
+	}
+
+	private static void _initTableAssignmentsFromGoogleSheet(String range) {
+		JSONObject jsonObject = readTableAssignmentsGoogleSheet(range);
 
 		JSONArray valuesResponseJSONArray = jsonObject.getJSONArray("values");
 
@@ -81,60 +133,10 @@ public class GoogleSheetsUtil {
 			guest.setCheckedIn(valueJSONArray.optBoolean(5, false));
 		}
 
-		JSONArray valuesRequestJSONArray = new JSONArray();
-
-		// Write guests to 'Table Assignments'
-
-		List<Guest> guests = Guest.getGuests();
-
-		for (int i = 0; i < guests.size() ; i++) {
-			Guest guest = guests.get(i);
-
-			valuesRequestJSONArray.put(new JSONArray()
-				.put(guest.getGuestName())
-				.put(guest.getRelatedGuestNames())
-				.put(guest.getTableNumber())
-				.put(guest.getCategory())
-				.put(guest.getMenuChoice())
-				.put(guest.getCheckedIn())
-			);
-		}
-
-		// Add blank spaces
-
-		for (int i = 0; i < 25 ; i++) {
-			Guest guest = guests.get(i);
-
-			valuesRequestJSONArray.put(new JSONArray()
-				.put("")
-				.put("")
-				.put("")
-				.put("")
-				.put("")
-				.put("")
-			);
-		}
-
-		sb = new StringBuilder();
-
-		sb.append("https://sheets.googleapis.com/v4/spreadsheets/");
-		sb.append(_sheetID);
-		sb.append("/values:batchUpdate");
-
-		JSONObject requestJSONObject = new JSONObject()
-			.put("valueInputOption", "RAW")
-			.put("data", new JSONArray()
-				.put(new JSONObject()
-					.put("range", "Table Assignments!A2:F")
-					.put("majorDimension", "ROWS")
-					.put("values", valuesRequestJSONArray)
-				)
-			);
-
-		CurlUtil.curl(sb.toString(), requestJSONObject.toString(), _accessToken);
+		writeTableAssignmentsGoogleSheet(range);
 	}
 
-	private static void _readGoogleSheet(
+	private static void _initSearchTableFromGoogleSheet(
 		String range, Guest.Category category) {
 
 		StringBuilder sb = new StringBuilder();
@@ -283,7 +285,7 @@ public class GoogleSheetsUtil {
 	private static JSONObject _accessTokenJSONObject;
 
 	private static String _accessToken;
-	private static String _sheetID = "1ReppAaCxdPT2dp1EW86T7-kABIC8LIvolwTb550Ll3Y";
+	private static String _sheetID = "1S-upsjmEjzzJ4JI4G55qhdSAoqshIccQewjaErbQwmY";
 
 	private final static String _WEDDING_APP_URL = EnvironmentUtil.get("WEDDING_APP_URL");
 	private final static String _GOOGLE_CLIENT_ID = EnvironmentUtil.get("GOOGLE_CLIENT_ID");

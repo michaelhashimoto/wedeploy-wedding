@@ -1,6 +1,10 @@
 package io.wedeploy.wedding;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,8 +24,19 @@ public class Guest {
 			throw new RuntimeException("Duplicate guest " + guestName);
 		}
 
+		try {
+			Thread.sleep(1);
+		}
+		catch (Exception e) {
+		}
+
 		_guests.put(guestName, this);
 
+		DateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmssSSS");
+
+		Date date = new Date();
+
+		_guestID = dateFormat.format(date);
 		_guestName = guestName;
 		_relatedGuestNames = relatedGuestNames;
 		_category = category;
@@ -40,6 +55,14 @@ public class Guest {
 		return "";
 	}
 
+	public Boolean isCheckedIn() {
+		return _checkedIn;
+	}
+
+	public String getGuestID() {
+		return _guestID;
+	}
+
 	public String getGuestName() {
 		return _guestName;
 	}
@@ -56,6 +79,7 @@ public class Guest {
 		JSONObject jsonObject = new JSONObject()
 			.put("category", getCategory())
 			.put("checked_in", getCheckedIn())
+			.put("guest_id", getGuestID())
 			.put("guest_name", getGuestName())
 			.put("menu_choice", getMenuChoice())
 			.put("related_guest_names", getRelatedGuestNames())
@@ -73,11 +97,70 @@ public class Guest {
 	}
 
 	public void setCheckedIn(Boolean checkedIn) {
+		System.out.println("Updating check-in for " + _guestName + " to " + checkedIn);
+
 		_checkedIn = checkedIn;
 	}
 
 	public void setTableNumber(Integer tableNumber) {
+		System.out.println("Updating table number for " + _guestName + " to " + tableNumber);
+
 		_tableNumber = tableNumber;
+	}
+
+	public static void updateGuests() {
+		JSONObject jsonObject = GoogleSheetsUtil.readTableAssignmentsGoogleSheet("Table Assignments!A:F");
+
+		JSONArray valuesResponseJSONArray = jsonObject.getJSONArray("values");
+
+		List<String> guestNames = new ArrayList<>();
+
+		Boolean updated = false;
+
+		for (int i = 1; i < valuesResponseJSONArray.length(); i++) {
+			JSONArray valueJSONArray = valuesResponseJSONArray.getJSONArray(i);
+
+			String guestName = valueJSONArray.optString(0, null);
+
+			if (guestName == null || guestName.equals("")) {
+				break;
+			}
+
+			if (guestNames.contains(guestName)) {
+				throw new RuntimeException(
+					"Duplicate guest name on table assignments: " + guestName);
+			}
+
+			guestNames.add(guestName);
+
+			if (!Guest.exists(guestName)) {
+				throw new RuntimeException(
+					"Unknown guest name on table assignment " + guestName +
+						" at line " + i);
+			}
+
+			Guest guest = Guest.getGuest(guestName);
+
+			String tableNumberString = guest.getTableNumber();
+
+			if (tableNumberString.isEmpty()) {
+				tableNumberString = "0";
+			}
+
+			Integer tableNumber = Integer.valueOf(tableNumberString);
+			Integer sheetsTableNumber = valueJSONArray.optInt(2, 0);
+
+			if (!tableNumber.equals(sheetsTableNumber)) {
+				guest.setTableNumber(sheetsTableNumber);
+			}
+
+			Boolean checkedIn = guest.isCheckedIn();
+			Boolean sheetsCheckedIn = valueJSONArray.optBoolean(5, false);
+
+			if (!checkedIn.equals(sheetsCheckedIn)) {
+				guest.setCheckedIn(sheetsCheckedIn);
+			}
+		}
 	}
 
 	public static Guest getGuest(String guestName) {
@@ -114,6 +197,7 @@ public class Guest {
 
 	private Category _category;
 	private boolean _checkedIn;
+	private String _guestID;
 	private String _guestName;
 	private String _menuChoice;
 	private int _tableNumber;

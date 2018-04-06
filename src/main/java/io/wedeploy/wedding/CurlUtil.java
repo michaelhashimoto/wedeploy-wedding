@@ -8,6 +8,11 @@ import java.net.URL;
 import java.net.HttpURLConnection;
 import java.net.URLConnection;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+
+import java.util.Date;
+
 import org.apache.commons.codec.binary.Base64;
 
 public class CurlUtil {
@@ -28,7 +33,11 @@ public class CurlUtil {
 			curl += "?key=" + _GOOGLE_KEY;
 		}
 
-		System.out.println("Reading " + curl);
+		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+
+		Date date = new Date();
+
+		System.out.println(dateFormat.format(date) + "\tReading " + curl);
 
 		try {
 			URL url = new URL(curl);
