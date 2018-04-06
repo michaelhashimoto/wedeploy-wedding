@@ -33,12 +33,6 @@ public class CurlUtil {
 			curl += "?key=" + _GOOGLE_KEY;
 		}
 
-		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
-
-		Date date = new Date();
-
-		System.out.println(dateFormat.format(date) + "\tReading " + curl);
-
 		try {
 			URL url = new URL(curl);
 
@@ -52,8 +46,6 @@ public class CurlUtil {
 
 				if (bearer != null) {
 					httpURLConnection.setRequestProperty("Authorization", "Bearer " + bearer);
-
-					System.out.println("bearer=" + bearer);
 				}
 
 				if (request != null) {

@@ -97,14 +97,10 @@ public class Guest {
 	}
 
 	public void setCheckedIn(Boolean checkedIn) {
-		System.out.println("Updating check-in for " + _guestName + " to " + checkedIn);
-
 		_checkedIn = checkedIn;
 	}
 
 	public void setTableNumber(Integer tableNumber) {
-		System.out.println("Updating table number for " + _guestName + " to " + tableNumber);
-
 		_tableNumber = tableNumber;
 	}
 
