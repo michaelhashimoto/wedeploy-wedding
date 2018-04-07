@@ -17,28 +17,23 @@ import org.quartz.Trigger;
 import org.quartz.TriggerBuilder;
 import org.quartz.impl.StdSchedulerFactory;
 
-public class GuestUpdaterJob implements Job {
+public class RefreshTokenJob implements Job {
 
 	public void execute(JobExecutionContext context)
 		throws JobExecutionException {
 
-		try {
-			Guest.updateGuests();
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-		}
+		GoogleSheetsUtil.refreshAccessToken();
 	}
 
 	public static void start() throws Exception {
 		if (_scheduler == null || _scheduler.isShutdown()) {
-			JobDetail jobDetail = JobBuilder.newJob(GuestUpdaterJob.class)
-				.withIdentity("guestUpdater", "group2")
+			JobDetail jobDetail = JobBuilder.newJob(RefreshTokenJob.class)
+				.withIdentity("refreshToken", "group")
 				.build();
 
 			Trigger trigger = TriggerBuilder
-				.newTrigger().withIdentity("cronTrigger", "group2")
-				.withSchedule(CronScheduleBuilder.cronSchedule("*/5 * * ? * *"))
+				.newTrigger().withIdentity("cronTrigger", "group")
+				.withSchedule(CronScheduleBuilder.cronSchedule("*/55 * * ? * *"))
 				.build();
 
 			_scheduler = new StdSchedulerFactory().getScheduler();

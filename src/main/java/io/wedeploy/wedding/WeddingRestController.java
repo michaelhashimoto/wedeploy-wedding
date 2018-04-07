@@ -21,9 +21,14 @@ public class WeddingRestController {
 
 	@RequestMapping(value="/code", method = RequestMethod.GET)
 	public RedirectView code(@RequestParam("code") String code) {
-		GoogleSheetsUtil.storeAccessToken(code);
+		if (!GoogleSheetsUtil.hasRefreshToken()) {
+			GoogleSheetsUtil.storeAccessToken(code);
 
-		GoogleSheetsUtil.init();
+			GoogleSheetsUtil.init();
+		}
+		else {
+			GoogleSheetsUtil.refreshAccessToken();
+		}
 
 		return new RedirectView("/");
 	}
@@ -55,10 +60,16 @@ public class WeddingRestController {
 		}
 
 		GuestUpdaterJob.start();
+		RefreshTokenJob.start();
 
 		JSONArray jsonArray = Guest.getGuestsJSONArray();
 
 		return jsonArray.toString();
+	}
+
+	@GetMapping("/is_logged_in")
+	public Boolean isLoggedIn() throws Exception {
+		return GoogleSheetsUtil.hasRefreshToken();
 	}
 
 	@GetMapping("/guests_by_table")

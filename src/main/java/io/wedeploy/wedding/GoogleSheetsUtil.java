@@ -49,6 +49,12 @@ public class GoogleSheetsUtil {
 	}
 
 	public static synchronized void writeTableAssignmentsGoogleSheet(String range) {
+		try {
+			Thread.sleep(1000);
+		}
+		catch (Exception e) {
+		}
+
 		JSONArray valuesRequestJSONArray = new JSONArray();
 
 		List<Guest> guests = Guest.getGuests();
@@ -250,6 +256,29 @@ public class GoogleSheetsUtil {
 		return _accessToken;
 	}
 
+	public static void refreshAccessToken() {
+		StringBuilder sb = new StringBuilder();
+
+		sb.append("https://www.googleapis.com/oauth2/v4/token?");
+		sb.append("refresh_token=" + _refreshToken + "&");
+		sb.append("client_id=" + _GOOGLE_CLIENT_ID + "&");
+		sb.append("client_secret=" + _GOOGLE_CLIENT_SECRET + "&");
+		sb.append("grant_type=refresh_token");
+
+		_accessTokenJSONObject = new JSONObject(CurlUtil.curl(
+			sb.toString(), "{}"));
+
+		_accessToken = _accessTokenJSONObject.getString("access_token");
+	}
+
+	public static boolean hasRefreshToken() {
+		if (_refreshToken == null) {
+			return false;
+		}
+
+		return true;
+	}
+
 	public static void storeAccessToken(String code) {
 		StringBuilder sb = new StringBuilder();
 
@@ -258,12 +287,13 @@ public class GoogleSheetsUtil {
 		sb.append("client_id=" + _GOOGLE_CLIENT_ID + "&");
 		sb.append("client_secret=" + _GOOGLE_CLIENT_SECRET + "&");
 		sb.append("redirect_uri=" + fixURI(_WEDDING_APP_URL + "/code") + "&");
-		sb.append("grant_type=" + "authorization_code");
+		sb.append("grant_type=authorization_code");
 
 		_accessTokenJSONObject = new JSONObject(CurlUtil.curl(
 			sb.toString(), "{}"));
 
 		_accessToken = _accessTokenJSONObject.getString("access_token");
+		_refreshToken = _accessTokenJSONObject.getString("refresh_token");
 	}
 
 	public static String getLoginURL() {
@@ -276,7 +306,13 @@ public class GoogleSheetsUtil {
 		sb.append("state=state_parameter_passthrough_value&");
 		sb.append("redirect_uri=" + fixURI(_WEDDING_APP_URL + "/code") + "&");
 		sb.append("response_type=code&");
-		sb.append("prompt=select_account&");
+		sb.append("prompt=select_account");
+
+		if (_refreshToken == null) {
+			sb.append(" consent");
+		}
+
+		sb.append("&");
 		sb.append("client_id=" + _GOOGLE_CLIENT_ID);
 
 		return sb.toString();
@@ -285,6 +321,7 @@ public class GoogleSheetsUtil {
 	private static JSONObject _accessTokenJSONObject;
 
 	private static String _accessToken;
+	private static String _refreshToken;
 	private static String _sheetID = "1ReppAaCxdPT2dp1EW86T7-kABIC8LIvolwTb550Ll3Y";
 	//private static String _sheetID = "1S-upsjmEjzzJ4JI4G55qhdSAoqshIccQewjaErbQwmY";
 

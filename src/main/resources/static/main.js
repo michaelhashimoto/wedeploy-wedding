@@ -32,10 +32,8 @@ var init_search = function(guests) {
 			guestNameElement.appendChild(relatedGuestNamesElement);
 		}
 
-		var guestPartyElement = document.createElement("td");
-		guestPartyElement.innerHTML = guest.category
-
 		var guestMenuChoiceElement = document.createElement("td");
+		guestMenuChoiceElement.setAttribute("class", "menu-choice")
 		guestMenuChoiceElement.innerHTML = guest.menu_choice
 
 		var guestCheckInElement = document.createElement("td");
@@ -53,13 +51,15 @@ var init_search = function(guests) {
 
 		var guestTableNumElement = document.createElement("td");
 		guestTableNumElement.setAttribute("class", "table-number")
-		guestTableNumElement.innerHTML = guest.table_num
+
+		if (guest.table_num != "") {
+			guestTableNumElement.innerHTML = "Table #" + guest.table_num
+		}
 
 		guestsElement.appendChild(guestElement);
 
 		guestElement.appendChild(guestNameElement);
 		guestElement.appendChild(guestTableNumElement);
-		guestElement.appendChild(guestPartyElement);
 		guestElement.appendChild(guestMenuChoiceElement);
 		guestElement.appendChild(guestCheckInElement);
 
@@ -173,7 +173,6 @@ var update_table = function(table_of_guests, tableBody, isUnassigned) {
 			tableGuest.innerHTML = guest_name;
 
 			var classValue = "table-entry";
-			console.log(guest);
 
 			if (guest != null) {
 				if (guest.category == "EN's Guests" && guest.checked_in == "TRUE") {
@@ -220,6 +219,31 @@ var init_tables_on_node = function() {
 	});
 }
 
+var remove_login = function() {
+	$.ajax({
+		type: 'GET',
+		url: '/is_logged_in',
+		crossDomain: false,
+		dataType: 'text',
+		success: function() {
+			console.log(arguments);
+			console.log(arguments[0]);
+
+			var isLoggedIn = arguments[0];
+
+			if (isLoggedIn == "true") {
+				var loginButton = document.getElementById("loginButton");
+
+				loginButton.innerHTML = "";
+			}
+		},
+		error: function() {
+			console.log(arguments);
+		}
+	});
+}
+
+$.ready(remove_login());
 $.ready(init_search_on_node());
 $.ready(init_tables_on_node());
 
@@ -326,12 +350,13 @@ var update_search = function(guests) {
 
 		tdElements[1].innerHTML = guest.table_num;
 
-		var checkedInElements = tdElements[4].getElementsByTagName("input");
+		if (guest.table_num != "") {
+			tdElements[1].innerHTML = "Table #" + guest.table_num
+		}
+
+		var checkedInElements = tdElements[3].getElementsByTagName("input");
 
 		if (guest.checked_in == "TRUE") {
-			console.log(guest.guest_name);
-			console.log(checkedInElements[0]);
-
 			checkedInElements[0].setAttribute("checked", "");
 		}
 		else {
