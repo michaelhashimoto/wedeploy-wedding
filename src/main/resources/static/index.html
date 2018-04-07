@@ -23,6 +23,7 @@
 		<ul class="nav nav-tabs">
 			<li class="active"><a data-toggle="tab" href="#check-in">Check-In</a></li>
 			<li><a data-toggle="tab" href="#table-assignment">Table Assignments</a></li>
+			<li><a data-toggle="tab" href="#table-layout">Table Layout</a></li>
 		</ul>
 
 		<div class="tab-content">
@@ -51,12 +52,19 @@
 			</div>
 			<div id="table-assignment" class="tab-pane fade">
 				<div class="container">
-					<img src="/table_layout.png" />
-
 					<div id="guestsByTables">
 						<div class="row">
 							<div class="col-sm-3">
-								<h4>Table #1</h4>
+								<h4 class="table-header">Table #1</h4>
+								<div class="table-entry">1. Michael Hashimoto</div>
+								<div class="table-entry">2. XXXXXXX XXXXXXX</div>
+								<div class="table-entry">3. XXXXXXX XXXXXXX</div>
+								<div class="table-entry en-absent">4. XXXXXXX XXXXXXX</div>
+								<div class="table-entry en-arrived">5. XXXXXXX XXXXXXX</div>
+								<div class="table-entry groom-absent">4. XXXXXXX XXXXXXX</div>
+								<div class="table-entry groom-arrived">5. XXXXXXX XXXXXXX</div>
+								<div class="table-entry bride-absent">4. XXXXXXX XXXXXXX</div>
+								<div class="table-entry bride-arrived">5. XXXXXXX XXXXXXX</div>
 							</div>
 							<div class="col-sm-3">
 								<h4>Table #2</h4>
@@ -84,6 +92,9 @@
 						</div>
 					</div>
 				</div>
+			</div>
+			<div id="table-layout" class="tab-pane fade">
+				<img src="/table_layout.png" />
 			</div>
 		</div>
 	</body>

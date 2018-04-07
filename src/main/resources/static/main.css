@@ -44,6 +44,59 @@ img {
 
 .col-sm-3 {
     box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.19);
-    padding-top: 6px;
-    padding-bottom: 6px;
+    padding-right: 0px;
+    padding-left: 0px;
+}
+
+.container {
+    width: 980px;
+}
+
+.table-header {
+    padding-left: 5px;
+    font-size: 40px;
+}
+
+.table-entry {
+    display: block;
+    text-align: left;
+    padding-left: 8px;
+    line-height: 35px;
+    border: black;
+    margin-bottom: 1px;
+    background-color: #eee;
+}
+
+.check-in {
+    font-size: 30px;
+}
+.guest-name {
+    font-size: 30px;
+}
+.table-number {
+    font-size: 30px;
+}
+
+.en-absent {
+    background-color: #ecffea;
+}
+
+.en-arrived {
+    background-color: #40ce33;
+}
+
+.bride-absent {
+    background-color: #ffe5f0;
+}
+
+.bride-arrived {
+    background-color: #ff77b0;
+}
+
+.groom-absent {
+    background-color: #e0ecff;
+}
+
+.groom-arrived {
+    background-color: #3881ff;
 }

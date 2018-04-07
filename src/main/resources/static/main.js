@@ -9,6 +9,7 @@ var init_search = function(guests) {
 
 		var guestNameElement = document.createElement("td");
 		var guestNameDivElement = document.createElement("div");
+		guestNameDivElement.setAttribute("class", "guest-name");
 		guestNameDivElement.innerHTML = guest.guest_name;
 		guestNameElement.appendChild(guestNameDivElement);
 
@@ -40,6 +41,7 @@ var init_search = function(guests) {
 		var guestCheckInElement = document.createElement("td");
 
 		var guestCheckBoxElement = document.createElement("input");
+		guestCheckBoxElement.setAttribute("class", "check-in");
 		guestCheckBoxElement.setAttribute("type", "checkbox");
 		guestCheckBoxElement.setAttribute("name", "check_in");
 		guestCheckBoxElement.setAttribute("id", "check-in-" + guest.guest_id);
@@ -50,6 +52,7 @@ var init_search = function(guests) {
 		}
 
 		var guestTableNumElement = document.createElement("td");
+		guestTableNumElement.setAttribute("class", "table-number")
 		guestTableNumElement.innerHTML = guest.table_num
 
 		guestsElement.appendChild(guestElement);
@@ -109,12 +112,13 @@ var init_tables = function(guests_by_table) {
 		}
 
 		var tableDiv = document.createElement("div");
-		tableDiv.setAttribute("class", "col-sm-" + columns_size);
+		tableDiv.setAttribute("class", "col-sm-" + columns_size + " ");
 
 		var tableHeader = document.createElement("h4");
+		tableHeader.setAttribute("class", "table-header");
 		tableHeader.innerHTML = "Table #" + table_num;
 
-		var tableBody = document.createElement("ol");
+		var tableBody = document.createElement("div");
 
 		tableDiv.appendChild(tableHeader);
 		tableDiv.appendChild(tableBody);
@@ -128,12 +132,13 @@ var init_tables = function(guests_by_table) {
 	unassignedRowDiv.setAttribute("class", "row");
 
 	var tableDiv = document.createElement("div");
-	tableDiv.setAttribute("class", "col-sm-12");
+	tableDiv.setAttribute("class", "col-sm-" + columns_size);
 
 	var tableHeader = document.createElement("h4");
+	tableHeader.setAttribute("class", "table-header");
 	tableHeader.innerHTML = "Unassigned";
 
-	var tableBody = document.createElement("ol");
+	var tableBody = document.createElement("div");
 
 	update_table(guests_by_table[0], tableBody, true);
 
@@ -158,14 +163,40 @@ var update_table = function(table_of_guests, tableBody, isUnassigned) {
 		for (var i = 0; (i < min_num_guests); i++) {
 			var guest = guests[i];
 
-			var guest_name = "";
+			var guest_name = (i + 1) + ". ---";
 
 			if (guest != null) {
-				guest_name = guest.guest_name;
+				guest_name = (i + 1) + ". " + guest.guest_name;
 			}
 
-			var tableGuest = document.createElement("li");
+			var tableGuest = document.createElement("div");
 			tableGuest.innerHTML = guest_name;
+
+			var classValue = "table-entry";
+			console.log(guest);
+
+			if (guest != null) {
+				if (guest.category == "EN's Guests" && guest.checked_in == "TRUE") {
+					classValue += " en-arrived";
+				}
+				else if (guest.category == "EN's Guests") {
+					classValue += " en-absent";
+				}
+				else if (guest.category == "Bride's Parent's Guests" && guest.checked_in == "TRUE") {
+					classValue += " bride-arrived";
+				}
+				else if (guest.category == "Bride's Parent's Guests") {
+					classValue += " bride-absent";
+				}
+				else if (guest.category == "Groom's Parent's Guests" && guest.checked_in == "TRUE") {
+					classValue += " groom-arrived";
+				}
+				else if (guest.category == "Groom's Parent's Guests") {
+					classValue += " groom-absent";
+				}
+			}
+
+			tableGuest.setAttribute("class", classValue);
 
 			tableBody.appendChild(tableGuest);
 		}
@@ -330,3 +361,4 @@ var intervalID = setInterval(function(){
 	update_search_on_node();
 	init_tables_on_node();
 }, 5000);
+
