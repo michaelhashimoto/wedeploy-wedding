@@ -1,0 +1,1 @@
+I will use google sheets data in order to serve up that data in a more understandable way, also I'm going to write to your existing google sheets so that if there are needed updates, I can make those changes as well.
