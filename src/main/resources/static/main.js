@@ -155,6 +155,10 @@ var init_tables = function(guests_by_table) {
 		tableHeader.setAttribute("class", "table-header");
 		tableHeader.innerHTML = "Table #" + table_num;
 
+		if (table_num == 6) {
+			tableHeader.innerHTML = "Table #" + table_num + " &#9917;";
+		}
+
 		var tableBody = document.createElement("div");
 
 		tableDiv.appendChild(tableHeader);
