@@ -42,6 +42,8 @@ var init_search = function(guests) {
 		var guestCheckBoxElement = document.createElement("input");
 		guestCheckBoxElement.setAttribute("type", "checkbox");
 		guestCheckBoxElement.setAttribute("name", "check_in");
+		guestCheckBoxElement.setAttribute("id", "check-in-" + guest.guest_id);
+		guestCheckBoxElement.setAttribute("onclick", "update_user_check_in(\"" + guest.guest_id + "\", \"" + guest.guest_name + "\")");
 
 		if (guest.checked_in == "TRUE") {
 			guestCheckBoxElement.setAttribute("checked", "");
@@ -249,6 +251,21 @@ $("#fancy").click(function() {
 
     postJSONData("/string", data);
 });
+
+var update_user_check_in = function(id, guest_name) {
+	var $checkIn = $("#check-in-" + id);
+
+	if ($checkIn[0].checked) {
+		var data = {"guest_name":guest_name, "checked_in":true};
+
+	    postJSONData("/string", data);
+	}
+	else {
+		var data = {"guest_name":guest_name, "checked_in":false};
+
+	    postJSONData("/string", data);
+	}
+}
 
 var postJSONData = function(url, data) {
     var request = {data:JSON.stringify(data)};

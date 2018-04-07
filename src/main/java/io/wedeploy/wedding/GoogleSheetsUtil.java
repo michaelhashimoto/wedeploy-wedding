@@ -48,7 +48,7 @@ public class GoogleSheetsUtil {
 		return new JSONObject(CurlUtil.curl(sb.toString(), null, GoogleSheetsUtil.getAccessToken()));
 	}
 
-	public static void writeTableAssignmentsGoogleSheet(String range) {
+	public static synchronized void writeTableAssignmentsGoogleSheet(String range) {
 		JSONArray valuesRequestJSONArray = new JSONArray();
 
 		List<Guest> guests = Guest.getGuests();

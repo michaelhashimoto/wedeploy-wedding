@@ -29,8 +29,19 @@ public class WeddingRestController {
 	}
 
 	@RequestMapping(value="/string", method = RequestMethod.POST)
-	public String string(@RequestParam("data") String data) {
-		System.out.println(data);
+	public synchronized String string(@RequestParam("data") String data) {
+		JSONObject jsonObject = new JSONObject(data);
+
+		System.out.println(jsonObject);
+
+		String guestName = jsonObject.getString("guest_name");
+		Boolean checkedIn = jsonObject.getBoolean("checked_in");
+
+		Guest guest = Guest.getGuest(guestName);
+
+		guest.setCheckedIn(checkedIn);
+
+		GoogleSheetsUtil.writeTableAssignmentsGoogleSheet("Table Assignments!A:F");
 
 		return "{\"message\":\"received\"}";
 	}

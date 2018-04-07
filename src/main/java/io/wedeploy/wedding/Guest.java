@@ -104,7 +104,7 @@ public class Guest {
 		_tableNumber = tableNumber;
 	}
 
-	public static void updateGuests() {
+	public static synchronized void updateGuests() {
 		JSONObject jsonObject = GoogleSheetsUtil.readTableAssignmentsGoogleSheet("Table Assignments!A:F");
 
 		JSONArray valuesResponseJSONArray = jsonObject.getJSONArray("values");
