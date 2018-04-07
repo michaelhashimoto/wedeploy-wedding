@@ -21,6 +21,9 @@ import com.google.api.services.sheets.v4.model.BatchGetValuesResponse;
 public class GoogleSheetsUtil {
 
 	public static void init() {
+		Group.init();
+		Guest.init();
+
 		_initSearchTableFromGoogleSheet("EN's Guests!A:I", Guest.Category.FRIENDS);
 		_initSearchTableFromGoogleSheet("Bride's Parents Guests!A:I", Guest.Category.BRIDES_FAMILY);
 		_initSearchTableFromGoogleSheet("Groom's Parents Guests!A:I", Guest.Category.GROOMS_FAMILY);

@@ -76,6 +76,17 @@ public class WeddingRestController {
 		return jsonArray.toString();
 	}
 
+	@GetMapping("/init_guests")
+	public RedirectView initGuests() throws Exception {
+		String accessToken = GoogleSheetsUtil.getAccessToken();
+
+		if (accessToken != null) {
+			GoogleSheetsUtil.init();
+		}
+
+		return new RedirectView("/");
+	}
+
 	@GetMapping("/is_logged_in")
 	public Boolean isLoggedIn() throws Exception {
 		return GoogleSheetsUtil.hasRefreshToken();

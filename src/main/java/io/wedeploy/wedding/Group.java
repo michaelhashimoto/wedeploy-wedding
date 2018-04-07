@@ -48,6 +48,10 @@ public class Group {
 	private List<Guest> _guests = new ArrayList<>();
 	private String _primaryGuestName;
 
+	public static void init() {
+		_groups.clear();
+	}
+
 	private static Map<String, Group> _groups = new HashMap<>();
 
 }

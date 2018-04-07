@@ -199,6 +199,10 @@ public class Guest {
 	private int _tableNumber;
 	private List<String> _relatedGuestNames;
 
+	public static void init() {
+		_guests.clear();
+	}
+
 	public static enum Category {
 		BRIDES_FAMILY("Bride's Parent's Guests"), FRIENDS("EN's Guests"),
 		GROOMS_FAMILY("Groom's Parent's Guests");
