@@ -14,6 +14,7 @@ var init_search = function(guests) {
 	guests.forEach(guest => {
 		var guestElement = document.createElement("tr");
 		guestElement.setAttribute("id", "search-" + guest.guest_id);
+		guestElement.setAttribute("class", getClassValue(guest));
 
 		var guestNameElement = document.createElement("td");
 		var guestNameDivElement = document.createElement("div");
@@ -246,24 +247,7 @@ var update_table = function(table_of_guests, tableBody, tableHeader, isUnassigne
 			var classValue = "table-entry";
 
 			if (guest != null) {
-				if (guest.category == "EN's Guests" && guest.checked_in == "TRUE") {
-					classValue += " en-arrived";
-				}
-				else if (guest.category == "EN's Guests") {
-					classValue += " en-absent";
-				}
-				else if (guest.category == "Bride's Parent's Guests" && guest.checked_in == "TRUE") {
-					classValue += " bride-arrived";
-				}
-				else if (guest.category == "Bride's Parent's Guests") {
-					classValue += " bride-absent";
-				}
-				else if (guest.category == "Groom's Parent's Guests" && guest.checked_in == "TRUE") {
-					classValue += " groom-arrived";
-				}
-				else if (guest.category == "Groom's Parent's Guests") {
-					classValue += " groom-absent";
-				}
+				classValue += " " + getClassValue(guest);
 			}
 
 			tableGuest.setAttribute("class", classValue);
@@ -272,6 +256,27 @@ var update_table = function(table_of_guests, tableBody, tableHeader, isUnassigne
 
 			i++;
 		}
+	}
+}
+
+var getClassValue = function(guest) {
+	if (guest.category == "EN's Guests" && guest.checked_in == "TRUE") {
+		return "en-arrived";
+	}
+	else if (guest.category == "EN's Guests") {
+		return "en-absent";
+	}
+	else if (guest.category == "Bride's Parent's Guests" && guest.checked_in == "TRUE") {
+		return "bride-arrived";
+	}
+	else if (guest.category == "Bride's Parent's Guests") {
+		return "bride-absent";
+	}
+	else if (guest.category == "Groom's Parent's Guests" && guest.checked_in == "TRUE") {
+		return "groom-arrived";
+	}
+	else if (guest.category == "Groom's Parent's Guests") {
+		return "groom-absent";
 	}
 }
 
@@ -425,6 +430,7 @@ var postJSONData = function(url, data) {
 var update_search = function(guests) {
 	guests.forEach(guest => {
 		var guestElement = document.getElementById("search-" + guest.guest_id);
+		guestElement.setAttribute("class", getClassValue(guest));
 
 		var tdElements = guestElement.childNodes;
 
