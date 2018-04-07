@@ -72,7 +72,7 @@ public class GoogleSheetsUtil {
 			);
 		}
 
-		for (int i = 0; i < 25 ; i++) {
+		for (int i = 0; i < 10 ; i++) {
 			Guest guest = guests.get(i);
 
 			valuesRequestJSONArray.put(new JSONArray()
