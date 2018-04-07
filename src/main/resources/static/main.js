@@ -1,3 +1,11 @@
+var request = new XMLHttpRequest();
+request.open('GET', '/guests_by_table', false);  // `false` makes the request synchronous
+request.send(null);
+
+if (request.status === 200) {
+	var guest_tables = JSON.parse(request.response);
+}
+
 var init_search = function(guests) {
 	var guestsElement = document.getElementById("guests");
 
@@ -50,11 +58,20 @@ var init_search = function(guests) {
 		}
 
 		var guestTableNumElement = document.createElement("td");
-		guestTableNumElement.setAttribute("class", "table-number")
+		guestTableNumElement.setAttribute("class", "table-number");
+
+		var guestTableNumSelectElement = get_table_number_select();
+		guestTableNumSelectElement.setAttribute("id", "table-number-" + guest.guest_id);
+		guestTableNumSelectElement.setAttribute("onchange", "update_user_table_num(\"" + guest.guest_id + "\", \"" + guest.guest_name + "\")");
 
 		if (guest.table_num != "") {
-			guestTableNumElement.innerHTML = "Table #" + guest.table_num
+			guestTableNumSelectElement.selectedIndex = parseInt(guest.table_num);
 		}
+		else {
+			guestTableNumSelectElement.selectedIndex = 0;
+		}
+
+		guestTableNumElement.appendChild(guestTableNumSelectElement);
 
 		guestsElement.appendChild(guestElement);
 
@@ -65,6 +82,25 @@ var init_search = function(guests) {
 
 		guestCheckInElement.appendChild(guestCheckBoxElement);
 	});
+}
+
+var get_table_number_select = function() {
+	var guestTableNumSelectElement = document.createElement("select");
+	guestTableNumSelectElement.setAttribute("class", "form-control");
+
+	var guestTableNumOptionElement = document.createElement("option");
+	guestTableNumOptionElement.innerHTML = "---";
+
+	guestTableNumSelectElement.appendChild(guestTableNumOptionElement);
+
+	for (var i = 0; i < guest_tables.length; i++) {
+		var guestTableNumOptionElement = document.createElement("option");
+		guestTableNumOptionElement.innerHTML = "Table #" + (i + 1);
+
+		guestTableNumSelectElement.appendChild(guestTableNumOptionElement);
+	}
+
+	return guestTableNumSelectElement;
 }
 
 var init_search_on_node = function() {
@@ -123,7 +159,7 @@ var init_tables = function(guests_by_table) {
 		tableDiv.appendChild(tableHeader);
 		tableDiv.appendChild(tableBody);
 
-		update_table(guests_by_table[table_num], tableBody);
+		update_table(guests_by_table[table_num], tableBody, tableHeader);
 
 		rowDiv.appendChild(tableDiv);
 	}
@@ -140,7 +176,7 @@ var init_tables = function(guests_by_table) {
 
 	var tableBody = document.createElement("div");
 
-	update_table(guests_by_table[0], tableBody, true);
+	update_table(guests_by_table[0], tableBody, tableHeader, true);
 
 	tableDiv.appendChild(tableHeader);
 	tableDiv.appendChild(tableBody);
@@ -150,7 +186,7 @@ var init_tables = function(guests_by_table) {
 	guestsByTablesElement.appendChild(unassignedRowDiv);
 }
 
-var update_table = function(table_of_guests, tableBody, isUnassigned) {
+var update_table = function(table_of_guests, tableBody, tableHeader, isUnassigned) {
 	var guests = table_of_guests.guests;
 
 	if (guests != null) {
@@ -160,7 +196,29 @@ var update_table = function(table_of_guests, tableBody, isUnassigned) {
 			min_num_guests = guests.length;
 		}
 
-		for (var i = 0; (i < min_num_guests); i++) {
+		console.log(table_of_guests);
+		console.log(min_num_guests);
+		console.log(guests.length);
+
+		var i = 0;
+
+		while (true) {
+			var hasMinimumNumberOfGuests = false;
+
+			if (i >= min_num_guests) {
+				hasMinimumNumberOfGuests = true;
+			}
+
+			var usedAllGuests = false;
+
+			if (i >= guests.length) {
+				usedAllGuests = true;
+			}
+
+			if (hasMinimumNumberOfGuests && usedAllGuests) {
+				break;
+			}
+
 			var guest = guests[i];
 
 			var guest_name = (i + 1) + ". ---";
@@ -170,6 +228,19 @@ var update_table = function(table_of_guests, tableBody, isUnassigned) {
 			}
 
 			var tableGuest = document.createElement("div");
+
+			if (guest != null) {
+				if (guest.menu_choice == "Vegetarian") {
+					guest_name += " &#9752;";
+
+					var tableHeaderValue = tableHeader.innerHTML;
+
+					tableHeaderValue += " &#9752;";
+
+					tableHeader.innerHTML = tableHeaderValue;
+				}
+			}
+
 			tableGuest.innerHTML = guest_name;
 
 			var classValue = "table-entry";
@@ -198,6 +269,8 @@ var update_table = function(table_of_guests, tableBody, isUnassigned) {
 			tableGuest.setAttribute("class", classValue);
 
 			tableBody.appendChild(tableGuest);
+
+			i++;
 		}
 	}
 }
@@ -226,9 +299,6 @@ var remove_login = function() {
 		crossDomain: false,
 		dataType: 'text',
 		success: function() {
-			console.log(arguments);
-			console.log(arguments[0]);
-
 			var isLoggedIn = arguments[0];
 
 			if (isLoggedIn == "true") {
@@ -322,6 +392,18 @@ var update_user_check_in = function(id, guest_name) {
 	}
 }
 
+var update_user_table_num = function(id, guest_name) {
+	var tableNumSelectElement = document.getElementById("table-number-" + id);
+
+	console.log(tableNumSelectElement);
+
+	var tableNumber = tableNumSelectElement.selectedIndex;
+
+	var data = {"guest_name":guest_name, "table_num":tableNumber};
+
+	postJSONData("/string", data);
+}
+
 var postJSONData = function(url, data) {
     var request = {data:JSON.stringify(data)};
 
@@ -341,17 +423,18 @@ var postJSONData = function(url, data) {
 }
 
 var update_search = function(guests) {
-	console.log("updating");
-
 	guests.forEach(guest => {
 		var guestElement = document.getElementById("search-" + guest.guest_id);
 
 		var tdElements = guestElement.childNodes;
 
-		tdElements[1].innerHTML = guest.table_num;
+		var selectElement = tdElements[1].getElementsByTagName("select");
 
 		if (guest.table_num != "") {
-			tdElements[1].innerHTML = "Table #" + guest.table_num
+			selectElement[0].selectedIndex = parseInt(guest.table_num);
+		}
+		else {
+			selectElement[0].selectedIndex = 0;
 		}
 
 		var checkedInElements = tdElements[3].getElementsByTagName("input");

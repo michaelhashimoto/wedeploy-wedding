@@ -40,11 +40,20 @@ public class WeddingRestController {
 		System.out.println(jsonObject);
 
 		String guestName = jsonObject.getString("guest_name");
-		Boolean checkedIn = jsonObject.getBoolean("checked_in");
 
 		Guest guest = Guest.getGuest(guestName);
 
-		guest.setCheckedIn(checkedIn);
+		if (jsonObject.has("checked_in")) {
+			Boolean checkedIn = jsonObject.getBoolean("checked_in");
+
+			guest.setCheckedIn(checkedIn);
+		}
+
+		if (jsonObject.has("table_num")) {
+			Integer tableNumber = jsonObject.getInt("table_num");
+
+			guest.setTableNumber(tableNumber);
+		}
 
 		GoogleSheetsUtil.writeTableAssignmentsGoogleSheet("Table Assignments!A:F");
 
