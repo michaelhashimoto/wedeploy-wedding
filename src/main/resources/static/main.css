@@ -22,10 +22,6 @@ img {
     width: 225px;
 }
 
-#guest-table tr:hover {
-    background-color: #ddd;
-}
-
 #guest-table th {
     padding-top: 12px;
     padding-bottom: 12px;
