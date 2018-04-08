@@ -41,21 +41,55 @@ public class WeddingRestController {
 
 		String guestName = jsonObject.getString("guest_name");
 
-		Guest guest = Guest.getGuest(guestName);
+		Guest updatedGuest = Guest.getGuest(guestName);
 
 		if (jsonObject.has("checked_in")) {
 			Boolean checkedIn = jsonObject.getBoolean("checked_in");
 
-			guest.setCheckedIn(checkedIn);
+			updatedGuest.setCheckedIn(checkedIn);
 		}
 
 		if (jsonObject.has("table_num")) {
 			Integer tableNumber = jsonObject.getInt("table_num");
 
-			guest.setTableNumber(tableNumber);
+			updatedGuest.setTableNumber(tableNumber);
 		}
 
-		GoogleSheetsUtil.writeTableAssignmentsGoogleSheet("Table Assignments!A:F");
+		JSONArray valuesRequestJSONArray = new JSONArray();
+
+		List<Guest> guests = Guest.getGuests();
+
+		for (int i = 0; i < guests.size() ; i++) {
+			Guest guest = guests.get(i);
+
+			if (guest.getGuestName().equals(updatedGuest.getGuestName())) {
+				guest = updatedGuest;
+			}
+
+			valuesRequestJSONArray.put(new JSONArray()
+				.put(guest.getGuestName())
+				.put(guest.getRelatedGuestNames())
+				.put(guest.getTableNumber())
+				.put(guest.getCategory())
+				.put(guest.getMenuChoice())
+				.put(guest.getCheckedIn())
+			);
+		}
+
+		for (int i = 0; i < 10 ; i++) {
+			Guest guest = guests.get(i);
+
+			valuesRequestJSONArray.put(new JSONArray()
+				.put("")
+				.put("")
+				.put("")
+				.put("")
+				.put("")
+				.put("")
+			);
+		}
+
+		GoogleSheetsUtil.writeTableAssignmentsGoogleSheet("Table Assignments!A:F", valuesRequestJSONArray);
 
 		return "{\"message\":\"received\"}";
 	}

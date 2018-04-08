@@ -52,12 +52,6 @@ public class GoogleSheetsUtil {
 	}
 
 	public static synchronized void writeTableAssignmentsGoogleSheet(String range) {
-		try {
-			Thread.sleep(1000);
-		}
-		catch (Exception e) {
-		}
-
 		JSONArray valuesRequestJSONArray = new JSONArray();
 
 		List<Guest> guests = Guest.getGuests();
@@ -87,6 +81,12 @@ public class GoogleSheetsUtil {
 				.put("")
 			);
 		}
+
+		writeTableAssignmentsGoogleSheet(range, valuesRequestJSONArray);
+	}
+
+	public static synchronized void writeTableAssignmentsGoogleSheet(
+		String range, JSONArray valuesRequestJSONArray) {
 
 		StringBuilder sb = new StringBuilder();
 
