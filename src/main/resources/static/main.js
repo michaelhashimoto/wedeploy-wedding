@@ -207,15 +207,6 @@ var update_table = function(table_of_guests, tableBody, tableHeader, isUnassigne
 
 		var i = 0;
 
-		if (!isUnassigned && (guests.length > min_num_guests)) {
-			var tableHeaderValue = tableHeader.innerHTML;
-
-			tableHeaderValue += " 👶";
-
-			tableHeader.innerHTML = tableHeaderValue;
-
-		}
-
 		while (true) {
 			var hasMinimumNumberOfGuests = false;
 
@@ -250,6 +241,16 @@ var update_table = function(table_of_guests, tableBody, tableHeader, isUnassigne
 					var tableHeaderValue = tableHeader.innerHTML;
 
 					tableHeaderValue += " &#9752;";
+
+					tableHeader.innerHTML = tableHeaderValue;
+				}
+
+				if (guest.guest_name == "Addy Yee" || guest.guest_name == "Natalie Thach") {
+					guest_name += " 👶";
+
+					var tableHeaderValue = tableHeader.innerHTML;
+
+					tableHeaderValue += " 👶";
 
 					tableHeader.innerHTML = tableHeaderValue;
 				}
