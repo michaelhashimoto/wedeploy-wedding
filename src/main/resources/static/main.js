@@ -207,6 +207,15 @@ var update_table = function(table_of_guests, tableBody, tableHeader, isUnassigne
 
 		var i = 0;
 
+		if (!isUnassigned && (guests.length > min_num_guests)) {
+			var tableHeaderValue = tableHeader.innerHTML;
+
+			tableHeaderValue += " 👶";
+
+			tableHeader.innerHTML = tableHeaderValue;
+
+		}
+
 		while (true) {
 			var hasMinimumNumberOfGuests = false;
 
