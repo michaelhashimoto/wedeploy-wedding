@@ -232,11 +232,11 @@ var update_table = function(table_of_guests, tableBody, tableHeader, isUnassigne
 
 			if (guest != null) {
 				if (guest.menu_choice == "Vegetarian") {
-					guest_name += " &#9752;";
+					guest_name += " 🍃";
 
 					var tableHeaderValue = tableHeader.innerHTML;
 
-					tableHeaderValue += " &#9752;";
+					tableHeaderValue += " 🍃";
 
 					tableHeader.innerHTML = tableHeaderValue;
 				}
@@ -247,6 +247,16 @@ var update_table = function(table_of_guests, tableBody, tableHeader, isUnassigne
 					var tableHeaderValue = tableHeader.innerHTML;
 
 					tableHeaderValue += " 👶";
+
+					tableHeader.innerHTML = tableHeaderValue;
+				}
+
+				if (guest.guest_name == "Cory Quitugua") {
+					guest_name += " 🌾";
+
+					var tableHeaderValue = tableHeader.innerHTML;
+
+					tableHeaderValue += " 🌾";
 
 					tableHeader.innerHTML = tableHeaderValue;
 				}
