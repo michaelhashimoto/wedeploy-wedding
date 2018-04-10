@@ -201,10 +201,6 @@ var update_table = function(table_of_guests, tableBody, tableHeader, isUnassigne
 			min_num_guests = guests.length;
 		}
 
-		console.log(table_of_guests);
-		console.log(min_num_guests);
-		console.log(guests.length);
-
 		var i = 0;
 
 		while (true) {

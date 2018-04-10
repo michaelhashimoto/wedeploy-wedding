@@ -159,7 +159,11 @@ public class Guest {
 		}
 	}
 
-	public static Guest getGuest(String guestName) {
+	public synchronized static void putGuest(String guestName, Guest guest) {
+		_guests.put(guestName, guest);
+	}
+
+	public synchronized static Guest getGuest(String guestName) {
 		if (_guests.containsKey(guestName)) {
 			return _guests.get(guestName);
 		}

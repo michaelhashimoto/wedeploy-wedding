@@ -82,12 +82,6 @@ public class GoogleSheetsUtil {
 			);
 		}
 
-		writeTableAssignmentsGoogleSheet(range, valuesRequestJSONArray);
-	}
-
-	public static synchronized void writeTableAssignmentsGoogleSheet(
-		String range, JSONArray valuesRequestJSONArray) {
-
 		StringBuilder sb = new StringBuilder();
 
 		sb.append("https://sheets.googleapis.com/v4/spreadsheets/");
