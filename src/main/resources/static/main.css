@@ -64,6 +64,14 @@ img {
 .check-in {
     text-align: center;
 }
+
+.check-in-label {
+    font-size: 20px;
+    padding-left: 10px;
+    font-weight: normal;
+    vertical-align: middle;
+}
+
 .menu-choice {
     font-size: 20px;
 }
@@ -105,6 +113,9 @@ input[type='checkbox'] {
     background:white;
     border-radius:5px;
     border:2px solid #555;
+    vertical-align: middle;
+    float: left;
+    margin: 0 auto;
 }
 
 input[type='checkbox']:checked {

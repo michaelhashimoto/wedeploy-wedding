@@ -54,8 +54,13 @@ var init_search = function(guests) {
 		guestCheckBoxElement.setAttribute("id", "check-in-" + guest.guest_id);
 		guestCheckBoxElement.setAttribute("onclick", "update_user_check_in(\"" + guest.guest_id + "\", \"" + guest.guest_name + "\")");
 
+		var guestCheckInLabelElement = document.createElement("label");
+		guestCheckInLabelElement.setAttribute("class", "check-in-label");
+		guestCheckInLabelElement.setAttribute("id", "check-in-label-" + guest.guest_id);
+
 		if (guest.checked_in == "TRUE") {
 			guestCheckBoxElement.setAttribute("checked", "");
+			guestCheckInLabelElement.innerHTML = "Checked In"
 		}
 
 		var guestTableNumElement = document.createElement("td");
@@ -82,6 +87,7 @@ var init_search = function(guests) {
 		guestElement.appendChild(guestCheckInElement);
 
 		guestCheckInElement.appendChild(guestCheckBoxElement);
+		guestCheckInElement.appendChild(guestCheckInLabelElement);
 	});
 }
 
@@ -463,13 +469,16 @@ var update_search = function(guests) {
 			selectElement[0].selectedIndex = 0;
 		}
 
-		var checkedInElements = tdElements[3].getElementsByTagName("input");
+		var checkedInCheckboxElements = tdElements[3].getElementsByTagName("input");
+		var checkedInLabelElement = document.getElementById("check-in-label-" + guest.guest_id);
 
 		if (guest.checked_in == "TRUE") {
-			checkedInElements[0].setAttribute("checked", "");
+			checkedInCheckboxElements[0].setAttribute("checked", "");
+			checkedInLabelElement.innerHTML = "Checked In";
 		}
 		else {
-			checkedInElements[0].removeAttribute("checked");
+			checkedInCheckboxElements[0].removeAttribute("checked");
+			checkedInLabelElement.innerHTML = "";
 		}
 	});
 }
